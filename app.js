@@ -2,18 +2,22 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const Campground = require("./models/campground")
+const seedDB = require("./seeds")
+
+seedDB();
 
 mongoose.connect("mongodb://localhost:27017/yelpCamp", {
   useNewUrlParser: true
 });
 
-const campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-})
+app.set("view engine", "ejs");
 
-const Campground = mongoose.model("Campground", campgroundSchema);
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(express.static("public"));
 
 // Campground.create({
 //   name: "Granite Hill",
@@ -26,15 +30,6 @@ const Campground = mongoose.model("Campground", campgroundSchema);
 //     console.log(campground);
 //   }
 // })
-
-
-app.set("view engine", "ejs");
-
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.use(express.static("public"));
 
 
 app.get("/", (req, res) => {
