@@ -17,11 +17,16 @@
 </div>
 
 <div class="row text-center" style="display: flex; flex-wrap: wrap">
-<%campGrounds.forEach( camp => { %>
+<%campGrounds.forEach(camp => { %>
 <div class="col-md-3 col-sm-6">
-<div>
-  <img class="img-thumbnail" src="<%=camp.image%>">
-    <h4 class="figure-caption"><%= camp.name%></h4>
+<div class="card">
+  <img class="card-img-top img-thumbnail" src="<%=camp.image%>">
+    <div class="card-body">
+      <h4 class="figure-caption card-title"><%= camp.name%></h4>
+      <p>
+        <a href="/campgrounds/<%=camp._id%>" class="btn btn-primary">More Info</a>
+      </p>
+    </div>
 </div>
 
 </div>
