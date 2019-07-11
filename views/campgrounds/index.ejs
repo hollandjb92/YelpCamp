@@ -1,4 +1,4 @@
-<%- include("partials/header") %>
+<%- include("../partials/header.ejs") %>
 
 
 <div class="container">
@@ -20,7 +20,7 @@
 <%campGrounds.forEach(camp => { %>
 <div class="col-md-3 col-sm-6">
 <div class="card">
-  <img class="card-img-top img-thumbnail" src="<%=camp.image%>">
+  <img class="card-img-top " src="<%=camp.image%>">
     <div class="card-body">
       <h4 class="figure-caption card-title"><%= camp.name%></h4>
       <p>
@@ -37,4 +37,4 @@
 
 
 
-<%- include("partials/footer") %>
+<%- include("../partials/footer") %>
