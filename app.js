@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local")
+const methodOverride = require("method-override");
 const Campground = require("./models/campground");
 const Comment = require("./models/comment");
 const User = require("./models/user");
@@ -16,7 +17,8 @@ const commentRoutes = require("./Routes/comments"),
 
 
 mongoose.connect("mongodb://localhost:27017/yelpCamp", {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useFindAndModify: false
 });
 
 app.set("view engine", "ejs");
@@ -42,7 +44,9 @@ app.use(passport.session());
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
-})
+});
+
+app.use(methodOverride("_method"));
 
 passport.use(new LocalStrategy(User.authenticate()));
 
