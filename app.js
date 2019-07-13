@@ -17,7 +17,7 @@ const commentRoutes = require("./Routes/comments"),
   authRoutes = require("./Routes/auth");
 
 
-mongoose.connect("mongodb://localhost:27017/yelpCamp", {
+mongoose.connect("mongodb+srv://admin-jordan:123password@cluster0-kzhxk.mongodb.net/yelpCamp", {
   useNewUrlParser: true,
   useFindAndModify: false
 });
