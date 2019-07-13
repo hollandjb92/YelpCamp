@@ -1,3 +1,14 @@
 .deleteForm {
   display: inline;
 }
+
+#signedIn {
+  text-decoration: none;
+  color: rgba(0, 0, 0, .5);
+  font-size: 1rem;
+}
+
+#listUser {
+  margin-top: 8px;
+  margin-right: 5px;
+}

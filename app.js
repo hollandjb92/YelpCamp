@@ -64,6 +64,6 @@ app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/", authRoutes);
 
-app.listen(3000, _ => {
+app.listen(process.env.PORT || 3000, _ => {
   console.log("Server running on Port 3000");
 })
