@@ -4,9 +4,10 @@ const router = express.Router({
 });
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
+const middleware = require("../middleware");
 
 //Comments New
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
 
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
@@ -20,9 +21,10 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 //Comments Create
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
+      req.flash("error", "Something went wrong");
       console.log(err);
       res.redirect("/campgrounds");
     } else {
@@ -37,6 +39,7 @@ router.post("/", isLoggedIn, (req, res) => {
           campground.comments.push(comment);
           campground.save();
           console.log(comment);
+          req.flash("success", "Succesfully added new comment");
           res.redirect("/campgrounds/" + campground._id)
         }
       })
@@ -45,7 +48,7 @@ router.post("/", isLoggedIn, (req, res) => {
 });
 
 //COMMENT EDIT
-router.get("/:commentId/edit", checkCommentAuth, (req, res) => {
+router.get("/:commentId/edit", middleware.isLoggedIn, middleware.checkCommentAuth, (req, res) => {
   Comment.findById(req.params.commentId, (err, foundComment) => {
     if (err) {
       res.redirect("back");
@@ -60,7 +63,7 @@ router.get("/:commentId/edit", checkCommentAuth, (req, res) => {
 
 //COMMENT UPDATE
 
-router.put("/:commentId", checkCommentAuth, (req, res) => {
+router.put("/:commentId", middleware.checkCommentAuth, (req, res) => {
   Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
     if (err) {
       res.redirect("back");
@@ -73,43 +76,17 @@ router.put("/:commentId", checkCommentAuth, (req, res) => {
 
 
 //COMMENT DESTROY
-router.delete("/:commentId", checkCommentAuth, (req, res) => {
+router.delete("/:commentId", middleware.checkCommentAuth, (req, res) => {
   Comment.findByIdAndDelete(req.params.commentId, err => {
     if (err) {
       res.redirect("back");
     } else {
+      req.flash("success", "Comment deleted");
       res.redirect("/campgrounds/" + req.params.id);
     }
   });
 });
 
-//Middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
 
-function checkCommentAuth(req, res, next) {
-  if (req.isAuthenticated()) {
-
-    Comment.findById(req.params.commentId, (err, foundComment) => {
-      if (err) {
-        res.redirect("back");
-      } else {
-        if (foundComment.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back")
-        }
-
-      }
-    })
-  } else {
-    res.redirect("back");
-  }
-
-}
 
 module.exports = router;

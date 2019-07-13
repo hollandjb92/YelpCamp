@@ -9,6 +9,7 @@ const Campground = require("./models/campground");
 const Comment = require("./models/comment");
 const User = require("./models/user");
 const seedDB = require("./seeds");
+const flash = require("connect-flash");
 
 //requiring routes
 const commentRoutes = require("./Routes/comments"),
@@ -29,6 +30,8 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static(__dirname + "/public"));
 
+app.use(flash());
+
 
 // seedDB(); //seed the database
 
@@ -43,8 +46,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
+
+
 
 app.use(methodOverride("_method"));
 
